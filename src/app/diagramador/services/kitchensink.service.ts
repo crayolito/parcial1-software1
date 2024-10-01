@@ -583,7 +583,7 @@ class KitchenSinkService {
         let jpaClasses: string[] = [];
 
         classElements.forEach((classElement) => {
-          if (classElement.color == '#c1ff00') {
+          if (classElement.color == '#ffd628') {
             return;
           }
 
@@ -600,7 +600,7 @@ class KitchenSinkService {
             .join('\n');
 
           let jpaClass: string = `
-        package com.examensoftware.parcial1.modelos;
+        package com.primerparcial.backendgenerado.modelos;
         import jakarta.persistence.*;
         import lombok.Data;
         import java.io.Serializable;
@@ -709,8 +709,6 @@ class KitchenSinkService {
 
         const zip = new JSZip();
         const modelsFolder = zip.folder('modelos');
-        const servicesFolder = zip.folder('servicios');
-        const controllersFolder = zip.folder('controladores');
         const repositoriesFolder = zip.folder('repositorios');
 
         jpaClasses.forEach((jpaClass) => {
@@ -723,21 +721,11 @@ class KitchenSinkService {
             className + 'Repositorio.java',
             this.repositorio(className)
           );
-
-          servicesFolder!.file(
-            className + 'Servicio.java',
-            this.servicio(className)
-          );
-
-          controllersFolder!.file(
-            className + 'Controlador.java',
-            this.controladores(className)
-          );
         });
 
         // Generate ZIP file
         zip.generateAsync({ type: 'blob' }).then((content) => {
-          saveAs(content, 'parcial.zip');
+          saveAs(content, 'software1p1.zip');
         });
       },
       'xmlImportar:pointerclick': () => {
@@ -1056,7 +1044,7 @@ class KitchenSinkService {
 			name="Domain Objects">`;
 
         for (let elementoClase of elementosClases) {
-          if (elementoClase.color == '#c1ff00') {
+          if (elementoClase.color == '#ffd628') {
             packagedElements += `<packagedElement xmi:type="uml:AssociationClass" xmi:id="${elementoClase.id}" name="${elementoClase.titulo}">`;
           } else {
             packagedElements += `<packagedElement xmi:type="uml:Class" xmi:id="${elementoClase.id}" name="${elementoClase.titulo}">`;
@@ -1140,7 +1128,7 @@ class KitchenSinkService {
 
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'architech.xml';
+        link.download = 'umlEntreprise.xml';
 
         link.click();
 
@@ -1151,112 +1139,11 @@ class KitchenSinkService {
     this.renderPlugin('.toolbar-container', this.toolbarService.toolbar);
   }
 
-  servicio(nombreClase: string): string {
-    return `package com.examensoftware.parcial1.servicios;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.examensoftware.parcial1.modelos.${nombreClase};
-import com.examensoftware.parcial1.repositorios.${nombreClase}Repositorio;
-
-import java.util.List;
-
-@Service
-public class ${nombreClase}Servicio {
-
-  @Autowired
-  private ${nombreClase}Repositorio repositorio;
-
-  public List<${nombreClase}> listar() {
-      return repositorio.findAll();
-  }
-
-  public ${nombreClase} obtenerPorId(Long id) {
-      return repositorio.findById(id).orElse(null);
-  }
-
-  public String guardar(${nombreClase} ${nombreClase.toLowerCase()}) {
-      repositorio.save(${nombreClase.toLowerCase()});
-      return "${nombreClase} guardado con éxito.";
-  }
-
-  public String actualizar(Long id, ${nombreClase} ${nombreClase.toLowerCase()}) {
-      if (repositorio.existsById(id)) {
-        ${nombreClase} objetoExistente = repositorio.findById(id).orElse(null);
-          repositorio.save(objetoExistente);
-          return "${nombreClase} actualizado con éxito.";
-      } else {
-          return "${nombreClase} no encontrado.";
-      }
-  }
-
-  public String eliminar(Long id) {
-      if (repositorio.existsById(id)) {
-          repositorio.deleteById(id);
-          return "${nombreClase} eliminado con éxito.";
-      } else {
-          return "${nombreClase} no encontrado.";
-      }
-  }
-}
-`;
-  }
-
-  controladores(nombreClase: string): string {
-    return `package com.examensoftware.parcial1.controladores;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.examensoftware.parcial1.modelos.${nombreClase};
-import com.examensoftware.parcial1.servicios.${nombreClase}Servicio;
-
-import java.util.List;
-
-@RestController
-@RequestMapping("/${nombreClase.toLowerCase()}")
-public class ${nombreClase}Controlador {
-
-@Autowired
-private ${nombreClase}Servicio servicio;
-
-@GetMapping
-public List<${nombreClase}> listar() {
-    return servicio.listar();
-}
-
-@GetMapping("/{id}")
-public ResponseEntity<${nombreClase}> obtenerPorId(@PathVariable Long id) {
-    ${nombreClase} ${nombreClase.toLowerCase()} = servicio.obtenerPorId(id);
-    return ${nombreClase.toLowerCase()} != null ? ResponseEntity.ok(${nombreClase.toLowerCase()}) : ResponseEntity.notFound().build();
-}
-
-@PostMapping
-public ResponseEntity<String> guardar(@RequestBody ${nombreClase} ${nombreClase.toLowerCase()}) {
-    String respuesta = servicio.guardar(${nombreClase.toLowerCase()});
-    return ResponseEntity.ok(respuesta);
-}
-
-@PutMapping("/{id}")
-public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ${nombreClase} ${nombreClase.toLowerCase()}) {
-    String respuesta = servicio.actualizar(id, ${nombreClase.toLowerCase()});
-    return ResponseEntity.ok(respuesta);
-}
-
-@DeleteMapping("/{id}")
-public ResponseEntity<String> eliminar(@PathVariable Long id) {
-    String respuesta = servicio.eliminar(id);
-    return ResponseEntity.ok(respuesta);
-}
-}
-`;
-  }
-
   repositorio(nombreClase: string): string {
-    return `package com.examensoftware.parcial1.repositorios;
+    return `package com.primerparcial.backendgenerado.repositorios;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.examensoftware.parcial1.modelos.${nombreClase};
+import com.primerparcial.backendgenerado1.modelos.${nombreClase};
 
 public interface ${nombreClase}Repositorio extends JpaRepository<${nombreClase}, Long> {
 }

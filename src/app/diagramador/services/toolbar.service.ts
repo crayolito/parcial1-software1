@@ -55,11 +55,11 @@ export class ToolbarService {
           type: 'button',
           name: 'xmlImportar',
           group: 'xmlImportar',
-          text: 'Enviar xml',
+          text: 'Convertir a UML',
           attrs: {
             button: {
               id: 'btn-importar-xml',
-              'data-tooltip': 'Llevar a Architec Enterprise',
+              'data-tooltip': '',
               'data-tooltip-position': 'top',
               'data-tooltip-position-selector': '.toolbar-container',
             },
@@ -69,7 +69,7 @@ export class ToolbarService {
           type: 'button',
           name: 'springBoot',
           group: 'springBoot',
-          text: 'Backend',
+          text: 'Generar Codigo',
           attrs: {
             button: {
               id: 'btn-springBoot',

@@ -74,20 +74,20 @@ export class StencilService {
             },
             body: {
               fill: 'transparent',
-              stroke: '#990DCE',
+              stroke: '#24d46d',
               strokeWidth: 2,
               strokeDasharray: '0',
             },
             header: {
-              stroke: '#990DCE',
-              fill: '#990DCE',
+              stroke: '#24d46d',
+              fill: '#24d46d',
               strokeWidth: 2,
               strokeDasharray: '0',
               height: 20,
             },
             bodyText: {
               textWrap: {
-                text: '- dato1 : tipoDato1\n- dato2 : tipoDato2',
+                text: '- nombre variable 1 : type dato pg  1\n- nombre variable 2 : type dato pg  2',
                 width: -10,
                 height: -20,
                 ellipsis: true,
@@ -100,7 +100,7 @@ export class StencilService {
               y: 'calc(h/2 + 10)',
             },
             headerText: {
-              text: 'A',
+              text: 'Clase',
               fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',
@@ -121,20 +121,20 @@ export class StencilService {
             },
             body: {
               fill: 'transparent',
-              stroke: '#c1ff00',
+              stroke: '#ffd628',
               strokeWidth: 2,
               strokeDasharray: '0',
             },
             header: {
-              stroke: '#c1ff00',
-              fill: '#c1ff00',
+              stroke: '#ffd628',
+              fill: '#ffd628',
               strokeWidth: 2,
               strokeDasharray: '0',
               height: 20,
             },
             bodyText: {
               textWrap: {
-                text: '- dato1 : tipoDato1\n- dato2 : tipoDato2',
+                text: '- nombre variable 1 : type dato pg  1\n- nombre variable 2 : type dato pg  2',
                 width: -10,
                 height: -20,
                 ellipsis: true,
@@ -147,7 +147,7 @@ export class StencilService {
               y: 'calc(h/2 + 10)',
             },
             headerText: {
-              text: 'A_B',
+              text: 'Clase_Clase',
               fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',

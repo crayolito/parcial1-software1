@@ -1,7 +1,19 @@
 <div
-  class="relative w-screen h-screen px-[1%] flex flex-row items-center justify-center bg-slate-800"
+  class="relative w-screen h-screen px-[1%] flex flex-row items-center justify-center"
 >
+  <img
+    src="assets/fonod.jpg"
+    alt=""
+    class="absolute inset-0 z-[-1] w-full h-full object-cover"
+  />
+  <div class="absolute inset-0 bg-black opacity-65 z-[-1]"></div>
+  <img
+    src="assets/logoFrontend.png"
+    alt=""
+    class="absolute w-[8%] h-[15%] object-contain top-[80%]"
+  />
   <!-- FORMULARIO REGISTRO  -->
+  <p class="absolute top-[5%] text-white text-5xl font-bold">SpringSync</p>
   <div class="w-[32%] h-[50%]">
     <form
       (ngSubmit)="procesoRegistro()"

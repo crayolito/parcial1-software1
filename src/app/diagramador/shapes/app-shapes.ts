@@ -318,7 +318,7 @@ export const NavigatorElementView = joint.dia.ElementView.extend({
       tagName: 'rect',
       selector: 'body',
       attributes: {
-        fill: '#990DCE',
+        fill: '#24d46d',
       },
     },
   ],

@@ -34,14 +34,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -88,14 +88,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -142,14 +142,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#c1ff00",
+          "stroke": "#ffd628",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#c1ff00",
-          "fill": "#c1ff00",
+          "stroke": "#ffd628",
+          "fill": "#ffd628",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -196,14 +196,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -250,14 +250,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -304,14 +304,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#c1ff00",
+          "stroke": "#ffd628",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#c1ff00",
-          "fill": "#c1ff00",
+          "stroke": "#ffd628",
+          "fill": "#ffd628",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -358,14 +358,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -570,14 +570,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -624,14 +624,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -678,14 +678,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
@@ -892,14 +892,14 @@ export const sampleGraphs = {
           "dataTooltipPositionSelector": ".joint-stencil"
         },
         "body": {
-          "stroke": "#990DCE",
+          "stroke": "#24d46d",
           "fill": "transparent",
           "strokeDasharray": "0"
         },
         "header": {
           "height": 20,
-          "stroke": "#990DCE",
-          "fill": "#990DCE",
+          "stroke": "#24d46d",
+          "fill": "#24d46d",
           "strokeDasharray": "0"
         },
         "headerText": {
