@@ -79,7 +79,7 @@ class KitchenSinkService {
 
   startRappid() {
     // READ : CAMBIAMOS EL FONDOS DE LA APLICACION
-    joint.setTheme('dark');
+    joint.setTheme('modern');
 
     this.initializePaper();
     this.initializeStencil();
@@ -426,20 +426,15 @@ class KitchenSinkService {
     this.renderPlugin('.navigator-container', navigator);
   }
 
-  convertirCadenaALista(cadena: string): AtributoClase[] {
-    // Paso 1: Eliminar todos los \\n
+  convertStringToList(cadena: string): AtributoClase[] {
     const cadenaSinSaltos = cadena.replace(/\\n/g, '');
 
-    // Paso 2: Dividir la cadena por el símbolo -
     const lista = cadenaSinSaltos.split('-');
 
-    // Paso 3: Filtrar los elementos vacíos
     const listaFiltrada = lista.filter((item) => item.trim() !== '');
 
-    // Devolver la lista de cadenas
     listaFiltrada.map((item) => item.trim());
 
-    // Paso 4: Crear la lista de atributos
     let listaAtributos: AtributoClase[] = [];
     listaFiltrada.forEach((item) => {
       let atributo: AtributoClase = {
@@ -467,7 +462,7 @@ class KitchenSinkService {
     }
   }
 
-  getC0andCI(
+  getOriginAndIntermediateClass(
     link: ElementoLink,
     elementosClase: ElementoClase[]
   ): ElementoClase[] {
@@ -490,7 +485,7 @@ class KitchenSinkService {
     return clasesUso;
   }
 
-  getClaseFByName(
+  getFinalClassByName(
     claseOxClaseI: ElementoClase[],
     elementosClase: ElementoClase[]
   ): ElementoClase {
@@ -499,9 +494,6 @@ class KitchenSinkService {
     let claseI = claseOxClaseI[1].titulo;
     let partes = claseI.split('_');
     let tituloClaseF = partes[partes.length - 1];
-    console.log(claseOxClaseI[0].titulo);
-    console.log(tituloClaseF);
-    console.log(claseI);
     if (tituloClaseF == claseOxClaseI[0].titulo) {
       tituloClaseF = partes[0];
     }
@@ -513,7 +505,7 @@ class KitchenSinkService {
     return claseUso;
   }
 
-  getLinkCIxClaseF(
+  getLinkBetweenIntermediateAndFinalClass(
     claseI: ElementoClase,
     claseF: ElementoClase,
     elementosLinks: ElementoLink[]
@@ -547,358 +539,206 @@ class KitchenSinkService {
     this.toolbarService.create(this.commandManager, this.paperScroller);
 
     this.toolbarService.toolbar.on({
-      'qr:pointerclick': () => {
-        this.viewModalQR = !this.viewModalQR;
-      },
-      'layout:pointerclick': this.layoutDirectedGraph.bind(this),
-      'snapline:change': this.changeSnapLines.bind(this),
-      'clear:pointerclick': this.graph.clear.bind(this.graph),
       'springBoot:pointerclick': () => {
-        const jsonJoint = this.graph.toJSON();
-        let elementosClases: ElementoClase[] = [];
-        let elementosLinks: ElementoLink[] = [];
-        let bansClassOneToOne: ElementoClase[] = [];
-        jsonJoint.cells.forEach((cell: any) => {
+        const jsonGraph = this.graph.toJSON();
+        let classElements: ElementoClase[] = [];
+        let linkElements: ElementoLink[] = [];
+        let oneToOneClassBans: ElementoClase[] = [];
+        jsonGraph.cells.forEach((cell: any) => {
           if (cell.type == 'standard.HeaderedRectangle') {
-            let elementoClase: ElementoClase = {
+            let classElement: ElementoClase = {
               titulo: cell.attrs.headerText.text,
               id: cell.id,
               posicion: [cell.position.x, cell.position.y],
               size: [cell.size.width, cell.size.height],
-              atributos: this.convertirCadenaALista(
+              atributos: this.convertStringToList(
                 cell.attrs.bodyText.textWrap.text
               ),
               color: cell.attrs.body.stroke,
             };
-            elementosClases.push(elementoClase);
+            classElements.push(classElement);
           } else if (cell.type == 'app.Link') {
-            let cabezeraOrigen: ElementoCabezera = {
+            let sourceHeader: ElementoCabezera = {
               id: cell.source.id,
               tipo: cell.attrs?.line?.sourceMarker?.d ?? 'M 0 0 0 0',
               normal: this.tipoCabecera(cell.attrs?.line?.sourceMarker?.d),
             };
 
-            let cabezeraDestino: ElementoCabezera = {
+            let targetHeader: ElementoCabezera = {
               id: cell.target.id,
               tipo: cell.attrs?.line?.targetMarker?.d ?? 'M 0 0 0 0',
               normal: this.tipoCabecera(cell.attrs?.line?.targetMarker?.d),
             };
 
-            let elementoLink: ElementoLink = {
+            let linkElement: ElementoLink = {
               id: cell.id,
-              origen: cabezeraOrigen,
-              destino: cabezeraDestino,
+              origen: sourceHeader,
+              destino: targetHeader,
               atributos: cell.labels.map((label: any) => label.attrs.text.text),
             };
-            elementosLinks.push(elementoLink);
+            linkElements.push(linkElement);
           }
         });
 
-        // READ : PAQUETES CLASES JPA
-        let clasesJPA: string[] = [];
+        let jpaClasses: string[] = [];
 
-        elementosClases.forEach((elementoClase) => {
-          if (elementoClase.color == '#feb663') {
+        classElements.forEach((classElement) => {
+          if (classElement.color == '#c1ff00') {
             return;
           }
 
-          //LOGIC : Crear una lista de atributos de la clase
-          let atributosClase: AtributosSB[] = elementoClase.atributos.map(
+          let classAttributes: AtributosSB[] = classElement.atributos.map(
             (atributo) => {
-              return this.parsearAtributo(atributo.titulo);
+              return this.parseAttribute(atributo.titulo);
             }
           );
 
-          // LOGIC : Atributos de la clase en formato JPA
-          let atributosJPA: string = atributosClase
+          let jpaAttributes: string = classAttributes
             .map((atributo) => {
               return `private ${atributo.tipo} ${atributo.nombre};`;
             })
             .join('\n');
 
-          let jpaClase: string = `
-package com.nombreproyecto.proyecto.modelos;
-import jakarta.persistence.*;
-import lombok.Data;
-import java.io.Serializable;
-import java.util.List;
+          let jpaClass: string = `
+        package com.examensoftware.parcial1.modelos;
+        import jakarta.persistence.*;
+        import lombok.Data;
+        import java.io.Serializable;
+        import java.util.List;
 
-@Data
-@Entity
-@Table (name = "${elementoClase.titulo.toLocaleLowerCase()}")
-public class ${elementoClase.titulo} implements Serializable {
-      @Id
-      @GeneratedValue(strategy = GenerationType.SEQUENCE)
-      ${atributosJPA}
-`;
+        @Data
+        @Entity
+        @Table (name = "${classElement.titulo.toLocaleLowerCase()}")
+        public class ${classElement.titulo} implements Serializable {
+          @Id
+          @GeneratedValue(strategy = GenerationType.SEQUENCE)
+          ${jpaAttributes}
+        `;
 
-          for (let elementoLink of elementosLinks) {
+          for (let linkElement of linkElements) {
             if (
-              elementoLink.origen.id != elementoClase.id &&
-              elementoLink.destino.id != elementoClase.id
+              linkElement.origen.id != classElement.id &&
+              linkElement.destino.id != classElement.id
             ) {
               continue;
             }
 
-            //LOGIC : Verificar que tenga solo un atributo
-            // if (
-            //   elementoLink.atributos.length == 1 &&
-            //   elementoClase.color != '#feb663'
-            // ) {
-            if (elementoLink.atributos.length == 1) {
-              // READ : CLASE_A LINK CLASE_A_B LINK CLASE_B
-              // LOGIC : ALMACENA LA CLASE ORIGEN Y LA INTERMEDIA
-              let claseOxClaseI: ElementoClase[] = [];
-              // LOGIC : FUNCION PARA BUSCAR SU OTRA MITAD
-              claseOxClaseI = this.getC0andCI(elementoLink, elementosClases);
-              // LOGIC : ALMACENA LA CLASE FINAL
-              let claseF: ElementoClase;
-              // LOGIC : FUNCION PARA BUSCAR LA CLASE FINAL
-              claseF = this.getClaseFByName(claseOxClaseI, elementosClases);
-              // LOGIC : PARA ALMACENAR Y BUSCAR EL LINK ENTRE LA INTERMDIA Y LA FINAL
-              let linkTarget: ElementoLink;
-              linkTarget = this.getLinkCIxClaseF(
-                claseOxClaseI[1],
-                claseF,
-                elementosLinks
+            if (linkElement.atributos.length == 1) {
+              let originAndIntermediateClass: ElementoClase[] = [];
+              originAndIntermediateClass = this.getOriginAndIntermediateClass(
+                linkElement,
+                classElements
+              );
+              let finalClass: ElementoClase;
+              finalClass = this.getFinalClassByName(
+                originAndIntermediateClass,
+                classElements
+              );
+              let targetLink: ElementoLink;
+              targetLink = this.getLinkBetweenIntermediateAndFinalClass(
+                originAndIntermediateClass[1],
+                finalClass,
+                linkElements
               );
 
               if (
-                elementoLink.atributos[0].includes('0...*') ||
-                elementoLink.atributos[0].includes('*...0')
+                linkElement.atributos[0].includes('0...*') ||
+                linkElement.atributos[0].includes('*...0')
               ) {
-                jpaClase += `
+                jpaClass += `
                   @ManyToMany
                   @JoinTable(
-                    name = "${claseOxClaseI[1].titulo.toLowerCase()}",
-                    joinColumns = @JoinColumn(name = "id_${claseOxClaseI[0].titulo.toLowerCase()}"),
-                    inverseJoinColumns = @JoinColumn(name = "id_${claseF.titulo.toLowerCase()}")
+                    name = "${originAndIntermediateClass[1].titulo.toLowerCase()}",
+                    joinColumns = @JoinColumn(name = "id_${originAndIntermediateClass[0].titulo.toLowerCase()}"),
+                    inverseJoinColumns = @JoinColumn(name = "id_${finalClass.titulo.toLowerCase()}")
                   )
-                  private List<${claseF.titulo}> ${pluralize(
-                  claseF.titulo.toLowerCase()
+                  private List<${finalClass.titulo}> ${pluralize(
+                  finalClass.titulo.toLowerCase()
                 )};
                 `;
               } else {
-                jpaClase += `
+                jpaClass += `
                   @ManyToMany(mappedBy = "${pluralize(
-                    claseOxClaseI[0].titulo.toLowerCase()
+                    originAndIntermediateClass[0].titulo.toLowerCase()
                   )}")
-                  private List<${claseF.titulo}> ${pluralize(
-                  claseF.titulo.toLowerCase()
+                  private List<${finalClass.titulo}> ${pluralize(
+                  finalClass.titulo.toLowerCase()
                 )};
                 `;
               }
             } else {
-              // LOGIC : Verificar si tiene dos atributos
-              // LOGIC : Verificar si esta unida al origen
-              let claseTrabajo: ElementoClase;
-              let relacionesClaseJPA: string;
-              if (elementoLink.origen.id == elementoClase.id) {
-                claseTrabajo = this.encontrarClaseTrabajo(
+              let workingClass: ElementoClase;
+              let jpaClassRelations: string;
+              if (linkElement.origen.id == classElement.id) {
+                workingClass = this.findWorkingClass(
                   'origen',
-                  elementoLink,
-                  elementosClases
+                  linkElement,
+                  classElements
                 );
-                // LOGIC : HACER RELACION DE CLASES A JPA
-                const [relacionesJPA, bans] = this.relacionesClaseJPA(
-                  elementoClase,
-                  elementoLink,
-                  claseTrabajo,
+                const [relationsJPA, bans] = this.createClassRelationsToJPA(
+                  classElement,
+                  linkElement,
+                  workingClass,
                   'origen',
-                  bansClassOneToOne
+                  oneToOneClassBans
                 );
-                relacionesClaseJPA = relacionesJPA;
-                bansClassOneToOne = bans;
-                jpaClase += relacionesClaseJPA;
+                jpaClassRelations = relationsJPA;
+                oneToOneClassBans = bans;
+                jpaClass += jpaClassRelations;
               } else {
-                // LOGIC : Verificar si esta unida al final
-                claseTrabajo = this.encontrarClaseTrabajo(
+                workingClass = this.findWorkingClass(
                   'destino',
-                  elementoLink,
-                  elementosClases
+                  linkElement,
+                  classElements
                 );
-                const [relacionesJPA, bans] = this.relacionesClaseJPA(
-                  elementoClase,
-                  elementoLink,
-                  claseTrabajo,
+                const [relationsJPA, bans] = this.createClassRelationsToJPA(
+                  classElement,
+                  linkElement,
+                  workingClass,
                   'destino',
-                  bansClassOneToOne
+                  oneToOneClassBans
                 );
-                relacionesClaseJPA = relacionesJPA;
-                bansClassOneToOne = bans;
-                jpaClase += relacionesClaseJPA;
+                jpaClassRelations = relationsJPA;
+                oneToOneClassBans = bans;
+                jpaClass += jpaClassRelations;
               }
             }
           }
-          clasesJPA.push(jpaClase + '\n}');
+          jpaClasses.push(jpaClass + '\n}');
         });
-
-        // READ : PAQUETES REPOSITORIOS
-
-        // READ : PAQUETES CONTROLADORES
-
-        // READ : PAQUETES SERVICIOS
 
         const zip = new JSZip();
-        const carpetaModelos = zip.folder('modelos');
-        const carpetaServicios = zip.folder('servicios');
-        const carpetaControladores = zip.folder('controladores');
-        const carpetaRepositorios = zip.folder('repositorios');
+        const modelsFolder = zip.folder('modelos');
+        const servicesFolder = zip.folder('servicios');
+        const controllersFolder = zip.folder('controladores');
+        const repositoriesFolder = zip.folder('repositorios');
 
-        // Crear archivo README.md
-        const contenidoREADME = `
-# Proyecto Generado
+        jpaClasses.forEach((jpaClass) => {
+          const className = this.nombreClase(jpaClass);
+          const fileName = className + '.java';
 
-Este proyecto contiene las siguientes carpetas y archivos:
+          modelsFolder!.file(fileName, jpaClass);
 
-- **modelos**: Contiene las clases de modelo JPA.
-- **repositorios**: Contiene las interfaces de repositorio.
-- **servicios**: Contiene las clases de servicio.
-- **controladores**: Contiene las clases de controlador.
-
-## Configuración de la Base de Datos
-
-El archivo \`application.properties\` contiene la configuración de la base de datos PostgreSQL.
-
-\`\`\`
-spring.application.name=proyecto
-spring.jpa.database=POSTGRESQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/proyecto
-spring.datasource.username=postgres
-spring.datasource.password=clave123
-spring.jpa.show-sql=true
-spring.security.basic.enabled=false
-spring.jackson.serialization.fail-on-empty-beans=false
-
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.ddl-auto=update
-server.port=8081
-\`\`\`
-
-**Nota:** Debes tener creada la base de datos con el nombre \`proyecto\` en PostgreSQL.
-
-## Ejecución del Proyecto
-
-Para ejecutar el proyecto, sigue estos pasos:
-
-1. Asegúrate de tener [Java](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) y [Maven](https://maven.apache.org/install.html) instalados en tu máquina.
-2. Navega al directorio raíz del proyecto donde se encuentra el archivo \`pom.xml\`.
-3. Ejecuta el siguiente comando para compilar y ejecutar el proyecto:
-   \`\`\`sh
-   mvn spring-boot:run
-   \`\`\`
-
-El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`application.properties\`.
-
-`;
-
-        zip.file('README.md', contenidoREADME);
-        zip.file('README.md', contenidoREADME);
-
-        clasesJPA.forEach((claseJPA) => {
-          const nombreClase = this.extraerNombreClase(claseJPA);
-          const nombreArchivo = nombreClase + '.java';
-
-          // Generar modelo
-          carpetaModelos!.file(nombreArchivo, claseJPA);
-
-          // Generar repositorio
-          carpetaRepositorios!.file(
-            nombreClase + 'Repositorio.java',
-            this.generarRepositorio(nombreClase)
+          repositoriesFolder!.file(
+            className + 'Repositorio.java',
+            this.repositorio(className)
           );
 
-          // Generar servicio
-          carpetaServicios!.file(
-            nombreClase + 'Servicio.java',
-            this.generarServicio(nombreClase)
+          servicesFolder!.file(
+            className + 'Servicio.java',
+            this.servicio(className)
           );
 
-          // Generar controlador
-          carpetaControladores!.file(
-            nombreClase + 'Controlador.java',
-            this.generarControlador(nombreClase)
+          controllersFolder!.file(
+            className + 'Controlador.java',
+            this.controladores(className)
           );
         });
 
-        // Generar archivo ZIP
+        // Generate ZIP file
         zip.generateAsync({ type: 'blob' }).then((content) => {
-          saveAs(content, 'complemento.zip');
+          saveAs(content, 'parcial.zip');
         });
-
-        let downloadUrl: string = `${this.apiUrl}/users/download/spring-boot-project`; // URL del endpoint
-        this.http.get(downloadUrl, { responseType: 'blob' }).subscribe({
-          next: (blob: Blob) => {
-            const fileName = 'spring-boot-project.zip';
-            saveAs(blob, fileName);
-            console.log('File downloaded successfully');
-          },
-          error: (err) => {
-            console.error('Error downloading file', err);
-          },
-        });
-      },
-      'jsonExportar:pointerclick': () => {
-        // LOGIC : Convertir el objeto JSON a una cadena
-        let graphJSON = this.graph.toJSON();
-        let contenidoGraph: string = JSON.stringify(
-          graphJSON,
-          (key, value) => {
-            if (key === 'text' && typeof value === 'string') {
-              // LOGIC : Reemplazar todas las ocurrencias de \n con \\n
-              return value.replace(/\n/g, '\\n');
-            }
-            return value;
-          },
-          2
-        );
-
-        const textoDocumento = new Blob([contenidoGraph], {
-          type: 'application/octet-stream',
-        });
-        const url = window.URL.createObjectURL(textoDocumento);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${uuidv4().substring(0, 6)}.json`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      },
-      'jsonImportar:pointerclick': () => {
-        const entrada = document.createElement('input');
-        entrada.type = 'file';
-        entrada.accept = '.json';
-        entrada.onchange = (event: any) => {
-          const archivo = event.target.files[0];
-          if (archivo) {
-            const lector = new FileReader();
-            lector.onload = (e) => {
-              try {
-                let jsonString = e.target!.result as string;
-                // LOGIC : Convertir la cadena JSON a un objeto
-                const json = JSON.parse(jsonString);
-
-                // LOGIC : Modificar el valor del campo "text"
-                const modifyTextFields = (obj: any) => {
-                  for (const key in obj) {
-                    if (typeof obj[key] === 'object' && obj[key] !== null) {
-                      modifyTextFields(obj[key]);
-                    } else if (key === 'text' && typeof obj[key] === 'string') {
-                      obj[key] = obj[key].replace(/\\n/g, '\n');
-                    }
-                  }
-                };
-
-                modifyTextFields(json);
-
-                this.graph.fromJSON(json);
-              } catch (error) {
-                console.error('Error al leer el archivo JSON:', error);
-              }
-            };
-            lector.readAsText(archivo);
-          }
-        };
-        entrada.click();
       },
       'xmlImportar:pointerclick': () => {
         const jsonJoint = this.graph.toJSON();
@@ -914,7 +754,7 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
               id: cell.id,
               posicion: [cell.position.x, cell.position.y],
               size: [cell.size.width, cell.size.height],
-              atributos: this.convertirCadenaALista(
+              atributos: this.convertStringToList(
                 cell.attrs.bodyText.textWrap.text
               ),
               color: cell.attrs.body.stroke,
@@ -965,15 +805,18 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
             // LOGIC : ALMACENA LA CLASE INTERMDIA AQUI
             let claseOxClaseI: ElementoClase[] = [];
             // LOGIC : FUNCION PARA BUSCAR SU OTRA MITAD
-            claseOxClaseI = this.getC0andCI(elementoLink, elementosClases);
+            claseOxClaseI = this.getOriginAndIntermediateClass(
+              elementoLink,
+              elementosClases
+            );
 
             // LOGIC : ALMACENA LA CLASE FINAL
             let claseF: ElementoClase;
             // LOGIC : FUNCION PARA BUSCAR LA CLASE FINAL
-            claseF = this.getClaseFByName(claseOxClaseI, elementosClases);
+            claseF = this.getFinalClassByName(claseOxClaseI, elementosClases);
             // LOGIC : PARA ALMACENAR Y BUSCAR EL LINK ENTRE LA INTERMDIA Y LA FINAL
             let linkTarget: ElementoLink;
-            linkTarget = this.getLinkCIxClaseF(
+            linkTarget = this.getLinkBetweenIntermediateAndFinalClass(
               claseOxClaseI[1],
               claseF,
               elementosLinks
@@ -1213,7 +1056,7 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
 			name="Domain Objects">`;
 
         for (let elementoClase of elementosClases) {
-          if (elementoClase.color == '#feb663') {
+          if (elementoClase.color == '#c1ff00') {
             packagedElements += `<packagedElement xmi:type="uml:AssociationClass" xmi:id="${elementoClase.id}" name="${elementoClase.titulo}">`;
           } else {
             packagedElements += `<packagedElement xmi:type="uml:Class" xmi:id="${elementoClase.id}" name="${elementoClase.titulo}">`;
@@ -1267,10 +1110,6 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
           `;
         }
         for (let elementoLink of diagramElement) {
-          // Verificar si el elementoLink ya está en linkOcupados
-          // if (linkOcupados.some((link) => link.id === elementoLink.id)) {
-          //   continue; // Saltar a la siguiente iteración si el link ya está ocupado
-          // }
           antepenultimo += `
             <element
             subject="${elementoLink}"
@@ -1284,17 +1123,12 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
         </xmi:XMI>
         `;
 
-        //   let etapa1Inicio = `
-        //   <packagedElement xmi:type="uml:Package" xmi:id="carpetaPrincipal" name="System">
-        //  `;
-
         // READ : EXTENSION XML
         let etapa2Inicio = `
         </uml:Model>
         <xmi:Extension extender="Enterprise Architect" extenderID="6.5">`;
 
         cabezaXML +=
-          // etapa1Inicio +
           packagedElements +
           etapa2Inicio +
           elements +
@@ -1302,41 +1136,28 @@ El proyecto se ejecutará en el puerto 8081, como se especifica en el archivo \`
           antepenultimo +
           final;
 
-        // Generar un UUID de 6 caracteres
-        const uuid = uuidv4().slice(0, 6);
-
-        // Nombre del archivo
-        const fileName = `${uuid}.xml`;
-
-        // Crear un blob con el contenido XML
         const blob = new Blob([cabezaXML], { type: 'application/xml' });
 
-        // Crear un enlace de descarga
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = fileName;
+        link.download = 'architech.xml';
 
-        // Simular un clic en el enlace para iniciar la descarga
         link.click();
 
-        // Liberar el objeto URL
         URL.revokeObjectURL(link.href);
       },
-      'xmlExportar:pointerclick': () => {},
-      'grid-size:change': this.paper.setGridSize.bind(this.paper),
     });
 
     this.renderPlugin('.toolbar-container', this.toolbarService.toolbar);
   }
 
-  // Generar servicio
-  generarServicio(nombreClase: string): string {
-    return `package com.nombreproyecto.proyecto.servicios;
+  servicio(nombreClase: string): string {
+    return `package com.examensoftware.parcial1.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.nombreproyecto.proyecto.modelos.${nombreClase};
-import com.nombreproyecto.proyecto.repositorios.${nombreClase}Repositorio;
+import com.examensoftware.parcial1.modelos.${nombreClase};
+import com.examensoftware.parcial1.repositorios.${nombreClase}Repositorio;
 
 import java.util.List;
 
@@ -1361,9 +1182,7 @@ public class ${nombreClase}Servicio {
 
   public String actualizar(Long id, ${nombreClase} ${nombreClase.toLowerCase()}) {
       if (repositorio.existsById(id)) {
-          ${nombreClase} objetoExistente = repositorio.findById(id).orElse(null);
-          // Aquí podrías copiar los valores del objeto existente al nuevo objeto
-          // por ejemplo: objetoExistente.setDescripcion(${nombreClase.toLowerCase()}.getDescripcion());
+        ${nombreClase} objetoExistente = repositorio.findById(id).orElse(null);
           repositorio.save(objetoExistente);
           return "${nombreClase} actualizado con éxito.";
       } else {
@@ -1383,15 +1202,14 @@ public class ${nombreClase}Servicio {
 `;
   }
 
-  // Generar controlador
-  generarControlador(nombreClase: string): string {
-    return `package com.nombreproyecto.proyecto.controladores;
+  controladores(nombreClase: string): string {
+    return `package com.examensoftware.parcial1.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.nombreproyecto.proyecto.modelos.${nombreClase};
-import com.nombreproyecto.proyecto.servicios.${nombreClase}Servicio;
+import com.examensoftware.parcial1.modelos.${nombreClase};
+import com.examensoftware.parcial1.servicios.${nombreClase}Servicio;
 
 import java.util.List;
 
@@ -1434,26 +1252,24 @@ public ResponseEntity<String> eliminar(@PathVariable Long id) {
 `;
   }
 
-  // Generar repositorio
-  generarRepositorio(nombreClase: string): string {
-    return `package com.nombreproyecto.proyecto.repositorios;
+  repositorio(nombreClase: string): string {
+    return `package com.examensoftware.parcial1.repositorios;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.nombreproyecto.proyecto.modelos.${nombreClase};
+import com.examensoftware.parcial1.modelos.${nombreClase};
 
 public interface ${nombreClase}Repositorio extends JpaRepository<${nombreClase}, Long> {
 }
 `;
   }
 
-  // Método para extraer el nombre de la clase JPA
-  extraerNombreClase(claseJPA: string): string {
+  nombreClase(claseJPA: string): string {
     const nombreClaseRegex = /public class (\w+)/;
     const resultado = claseJPA.match(nombreClaseRegex);
     return resultado ? resultado[1] : 'ClaseDesconocida';
   }
 
-  relacionesClaseJPA(
+  createClassRelationsToJPA(
     elementoClase1: ElementoClase,
     link: ElementoLink,
     elementoClase2: ElementoClase,
@@ -1464,7 +1280,6 @@ public interface ${nombreClase}Repositorio extends JpaRepository<${nombreClase},
     const cardinalidad: string =
       posicion === 'origen' ? link.atributos[0] : link.atributos[1];
 
-    // LOGIC : DEBE CUMPLIR ESTA CARDINALIDAD PARA OneToOne
     if (link.atributos[0] == '1...1' && link.atributos[1] == '1...1') {
       if (bansClassOneToOne.includes(elementoClase1)) {
         respuesta = `
@@ -1506,7 +1321,7 @@ public interface ${nombreClase}Repositorio extends JpaRepository<${nombreClase},
     return [respuesta, bansClassOneToOne];
   }
 
-  parsearAtributo(atributo: string): AtributosSB {
+  parseAttribute(atributo: string): AtributosSB {
     const [nombre, tipoPostgres] = atributo.trim().split(':');
     const tipoJava = this.convertirTipoPostgresATipoJava(tipoPostgres);
     return new AtributosSB(nombre, tipoJava);
@@ -1532,7 +1347,7 @@ public interface ${nombreClase}Repositorio extends JpaRepository<${nombreClase},
     return mapeoTipos[tipoPostgres] || 'String';
   }
 
-  encontrarClaseTrabajo(
+  findWorkingClass(
     tipo: string,
     elementoLink: ElementoLink,
     elementosClases: ElementoClase[]

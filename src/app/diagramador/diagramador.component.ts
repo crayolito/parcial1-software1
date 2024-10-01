@@ -13,8 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxQrcodeStylingService, Options } from 'ngx-qrcode-styling';
 import { Subscription } from 'rxjs';
-import { sampleGraphs } from '../../config/sample-graphs copy';
-import { AuthService } from '../auth/auth.service';
+import { sampleGraphs } from '../../config/sample-graphs';
+import { HomeService } from '../home/home.service';
 import { ThemePicker } from './components/theme-picker';
 import { DiagramadorService } from './diagramador.service';
 import { HaloService } from './services/halo.service';
@@ -40,7 +40,7 @@ export default class DiagramadorComponent
   public qrcode = inject(NgxQrcodeStylingService);
   public diagramadorService = inject(DiagramadorService);
   public route = inject(Router);
-  public userAuth = inject(AuthService);
+  public userAuth = inject(HomeService);
   onListenRespUnirseReunion!: Subscription;
   private rappid: RappidService;
 

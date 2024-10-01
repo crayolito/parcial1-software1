@@ -24,7 +24,7 @@ export enum StatusAuth {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class HomeService {
   private apiUrl = environment.apiUrl;
   private _statusClient = signal<StatusAuth>(StatusAuth.NoAutenticado);
   private _userAuth = signal<UserAuth | null>(null);

@@ -2,12 +2,10 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   inject,
   OnDestroy,
   OnInit,
   signal,
-  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -17,19 +15,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  BrowserMultiFormatReader,
-  NotFoundException,
-  Result,
-} from '@zxing/library';
+import { BrowserMultiFormatReader } from '@zxing/library';
 import { Subscription } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  AuthService,
-  SalaDiagrama,
-  StatusAuth,
-  UserAuth,
-} from './auth.service';
+import { HomeService } from './../home/home.service';
+import { SalaDiagrama, StatusAuth, UserAuth } from './home.service';
 export enum ViewTypeForm {
   login,
   register,
@@ -39,20 +29,18 @@ export enum ViewTypeForm {
   selector: 'app-auth',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
-  templateUrl: './auth.component.html',
-  styleUrl: './auth.component.css',
+  templateUrl: './home.component.html',
 })
-export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('modalCustomHTML') modalCustomHTML: ElementRef;
+export default class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   onListenRespUnirseReunion!: Subscription;
   onListenRespNuevaReunion!: Subscription;
-  public serviceAuth = inject(AuthService);
+  public serviceAuth = inject(HomeService);
   public formBuilder = inject(FormBuilder);
   public router = inject(Router);
   public viewFormAuth = signal<boolean>(false);
   public infoDate = signal<Date>(new Date());
   public viewFormLogin = signal<boolean>(false);
-  // READ : INPUT CODIGO SALA
+
   public inputCodigoSala: string = '';
   // READ : PROPIEDADES DEL MODAL
   public modalCustomView = signal<boolean>(false);
@@ -95,10 +83,9 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
           nombre: data.nombre,
           host: data.host,
         };
-        // console.log(salaDiagrama);
         this.serviceAuth.setSalaDiagrama(salaDiagrama);
         // LOGIC : REDIRECCIONAR A LA SALA DE REUNION
-        this.router.navigate(['/diagramador', data.nombre]);
+        this.router.navigate(['/uml', data.nombre]);
       });
 
     this.onListenRespNuevaReunion = this.serviceAuth
@@ -117,22 +104,13 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.serviceAuth.setSalaDiagrama(salaDiagrama);
         // LOGIC : REDIRECCIONAR A LA SALA DE REUNION
-        this.router.navigate(['/diagramador', data.nombre]);
+        this.router.navigate(['/uml', data.nombre]);
       });
   }
 
-  ngAfterViewInit(): void {
-    this.modalCustomHTML.nativeElement.addEventListener(
-      'click',
-      this.cerrarModal.bind(this)
-    );
-  }
+  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
-    this.modalCustomHTML.nativeElement.removeEventListener(
-      'click',
-      this.cerrarModal.bind(this)
-    );
     this.onListenRespUnirseReunion.unsubscribe();
     this.onListenRespNuevaReunion.unsubscribe();
   }
@@ -164,29 +142,14 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
           //LOGIC: GUARDAR INFORMACION DEL USER EN EL LOCALSTORAGE
           localStorage.setItem('userAuth', JSON.stringify(response));
         },
-        (dataError) => {
-          console.log(dataError);
-          this.messageModalCustom.set(
-            'Revise sus credenciales para iniciar sesión'
-          );
-          this.modalCustomView.set(true);
-        }
+        (dataError) => {}
       );
     } else {
-      this.messageModalCustom.set(
-        'Revise sus credenciales para iniciar sesión'
-      );
-      this.modalCustomView.set(true);
     }
   }
 
   procesoRegistro(): void {
     const { email, password, passwordConfirm } = this.myFormRegister.value;
-    if (password != passwordConfirm) {
-      this.messageModalCustom.set('Las contraseñas no coinciden');
-      this.modalCustomView.set(true);
-      return;
-    }
 
     if (this.myFormRegister.valid) {
       this.serviceAuth.procesoRegistro(email, password).subscribe(
@@ -199,17 +162,9 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         (dataError) => {
           console.log(dataError);
-          this.messageModalCustom.set(
-            'Revise el formulario de registro e intente nuevamente'
-          );
-          this.modalCustomView.set(true);
         }
       );
     } else {
-      this.messageModalCustom.set(
-        'Revise el formulario de registro e intente nuevamente'
-      );
-      this.modalCustomView.set(true);
     }
   }
 
@@ -225,12 +180,6 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
 
   unirmReunion(): void {
     if (!this.isAuthenticado()) return;
-  }
-
-  cerrarModal(event: any): void {
-    if (event.target == this.modalCustomHTML.nativeElement) {
-      this.modalCustomView.set(false);
-    }
   }
 
   emitNuevaReunion(): void {
@@ -252,33 +201,5 @@ export default class AuthComponent implements OnInit, OnDestroy, AfterViewInit {
       this.serviceAuth.getUserAuth()!.id,
       this.inputCodigoSala
     );
-  }
-
-  leerQRSala(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const imageSrc = e.target.result;
-        this.codeReader
-          .decodeFromImage(undefined, imageSrc)
-          .then((result: Result) => {
-            const qrText = result.getText();
-            console.log('QR Code Result:', qrText);
-            this.serviceAuth.emitUnirseReunion(
-              this.serviceAuth.getUserAuth()!.id,
-              qrText
-            );
-          })
-          .catch((err) => {
-            if (err instanceof NotFoundException) {
-              console.error('No QR code found.');
-            } else {
-              console.error('Error reading QR code:', err);
-            }
-          });
-      };
-      reader.readAsDataURL(file);
-    }
   }
 }

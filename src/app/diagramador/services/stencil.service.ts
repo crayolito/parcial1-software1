@@ -56,7 +56,7 @@ export class StencilService {
 
   getStencilGroups() {
     return <{ [key: string]: ui.Stencil.Group }>{
-      standard: { index: 1, label: 'Clases de Trabajo' },
+      standard: { index: 1, label: 'DIAGRAMA RELACIONAL' },
     };
   }
 
@@ -74,25 +74,25 @@ export class StencilService {
             },
             body: {
               fill: 'transparent',
-              stroke: '#31d0c6',
+              stroke: '#990DCE',
               strokeWidth: 2,
               strokeDasharray: '0',
             },
             header: {
-              stroke: '#31d0c6',
-              fill: '#31d0c6',
+              stroke: '#990DCE',
+              fill: '#990DCE',
               strokeWidth: 2,
               strokeDasharray: '0',
               height: 20,
             },
             bodyText: {
               textWrap: {
-                text: '- atributo1 : valor1\n- atributo2 : valor2\n- atributo3 : valor3\n- atributo4 : valor4',
+                text: '- dato1 : tipoDato1\n- dato2 : tipoDato2',
                 width: -10,
                 height: -20,
                 ellipsis: true,
               },
-              fill: '#FFFFFF',
+              fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',
               fontSize: 11,
@@ -100,7 +100,7 @@ export class StencilService {
               y: 'calc(h/2 + 10)',
             },
             headerText: {
-              text: 'tituloClase',
+              text: 'A',
               fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',
@@ -121,81 +121,34 @@ export class StencilService {
             },
             body: {
               fill: 'transparent',
-              stroke: '#feb663',
+              stroke: '#c1ff00',
               strokeWidth: 2,
               strokeDasharray: '0',
             },
             header: {
-              stroke: '#feb663',
-              fill: '#feb663',
+              stroke: '#c1ff00',
+              fill: '#c1ff00',
               strokeWidth: 2,
               strokeDasharray: '0',
               height: 20,
             },
             bodyText: {
               textWrap: {
-                text: '- atributo1 : valor1\n- atributo2 : valor2\n- atributo3 : valor3\n- atributo4 : valor4',
+                text: '- dato1 : tipoDato1\n- dato2 : tipoDato2',
                 width: -10,
                 height: -20,
                 ellipsis: true,
               },
-              fill: '#FFFFFF',
-              fontFamily: 'Averia Libre',
-              fontWeight: 'Bold',
-              fontSize: 11,
-              strokeWidth: 0,
-              y: 'calc(h/2 + 10)',
-            },
-            headerText: {
-              text: 'tituloClase1_tituloClase2',
               fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',
               fontSize: 11,
               strokeWidth: 0,
-              y: 10,
-            },
-          },
-        },
-        {
-          type: 'standard.HeaderedRectangle',
-          size: { width: 200, height: 170 },
-          attrs: {
-            root: {
-              dataTooltip: 'Rectangle with header',
-              dataTooltipPosition: 'left',
-              dataTooltipPositionSelector: '.joint-stencil',
-            },
-            body: {
-              fill: 'transparent',
-              stroke: '#c237DB',
-              strokeWidth: 2,
-              strokeDasharray: '0',
-            },
-            header: {
-              stroke: '#c237DB',
-              fill: '#c237DB',
-              strokeWidth: 2,
-              strokeDasharray: '0',
-              height: 25,
-            },
-            bodyText: {
-              textWrap: {
-                text: 'VARCHAR(n) / TEXT => String\n CHAR(n) => String\n INTEGER => Long\n SERIAL => Long\n BIGINT => Long\n SMALLINT => Long\n NUMERIC(p, s) => BigDecimal\n DECIMAL(p, s) => BigDecimal\n REAL => Float\n DOUBLE PRECISION => Double',
-                width: -10,
-                height: -20,
-                ellipsis: true,
-              },
-              fill: '#FFFFFF',
-              fontFamily: 'Averia Libre',
-              fontWeight: 'Bold',
-              fontSize: 11,
-              strokeWidth: 0,
               y: 'calc(h/2 + 10)',
             },
             headerText: {
-              text: 'Tipos de Datos\nPostgreSQL => Spring Boot',
-              fill: '#FFFFFF',
+              text: 'A_B',
+              fill: '#000000',
               fontFamily: 'Averia Libre',
               fontWeight: 'Bold',
               fontSize: 11,

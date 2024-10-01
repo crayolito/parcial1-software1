@@ -1,0 +1,164 @@
+<div
+  class="relative w-screen h-screen px-[1%] flex flex-row items-center justify-center bg-slate-800"
+>
+  <!-- FORMULARIO REGISTRO  -->
+  <div class="w-[32%] h-[50%]">
+    <form
+      (ngSubmit)="procesoRegistro()"
+      [formGroup]="myFormRegister"
+      action=""
+      class="w-full h-full flex flex-col items-center gap-2"
+      autocomplete="off"
+    >
+      <p class="text-2xl font-bold font-google-suse text-white">
+        Formulario de registro
+      </p>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-cente"
+      >
+        <input
+          formControlName="email"
+          type="text"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="email"
+          autocomplete="new-password"
+        />
+      </div>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <input
+          formControlName="password"
+          type="password"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="primera ves clave"
+        />
+      </div>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <input
+          formControlName="passwordConfirm"
+          type="password"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="segunda ves clave"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <p class="text-slate-800 text-xl font-google-suse font-bold">
+          Salvar Datos
+        </p>
+      </button>
+    </form>
+  </div>
+  <!-- FORMULARIO DE INICIO DE SESION -->
+  <div class="w-[32%] h-[50%]">
+    <form
+      (ngSubmit)="procesoLogin()"
+      [formGroup]="myFormLogin"
+      action=""
+      class="w-full h-full flex flex-col items-center gap-2"
+      autocomplete="off"
+    >
+      <p class="text-2xl font-bold font-google-suse text-white">
+        Formulario Login
+      </p>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <input
+          formControlName="email"
+          type="text"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="Email"
+          autocomplete="new-password"
+        />
+      </div>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <input
+          formControlName="password"
+          type="password"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="Clave Secreta"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <p class="text-slate-800 text-xl font-google-suse font-bold">Iniciar</p>
+      </button>
+    </form>
+  </div>
+  <!-- FORMULARIO INICIO DE SALA -->
+  <div class="w-[32%] h-[50%]">
+    <!-- OPTIONS SALA -->
+    <section
+      class="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[1.5%]"
+    >
+      <button
+        (click)="updateViewFormAuth()"
+        [ngClass]="{ 'border-2 border-white p-1': viewFormAuth() }"
+        class="h-[20%] w-[10%] rounded-full"
+      >
+        @if(isAuthenticado()){
+        <img
+          src="assets/check.svg"
+          alt=""
+          class="h-[100%] w-[100%] object-contain"
+        />
+        }@else {
+        <img
+          src="assets/malUser.svg"
+          alt=""
+          class="h-[100%] w-[100%] object-contain"
+        />
+        }
+      </button>
+      <p class="text-2xl font-bold font-google-suse text-white">
+        Formulario Sala trabajo
+      </p>
+      <button
+        (click)="emitNuevaReunion()"
+        class="bg-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <p class="text-slate-800 text-xl font-bold font-google-suse">
+          Crear Reunion
+        </p>
+      </button>
+
+      <button
+        (click)="emitUnirseReunion()"
+        class="bg-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <p class="text-slate-800 text-xl font-google-suse font-bold">Unirme</p>
+      </button>
+      <div
+        class="border-b-2 border-b-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <input
+          [(ngModel)]="inputCodigoSala"
+          type="text"
+          class="bg-transparent text-white text-xl font-google-suse outline-none"
+          placeholder="id la room"
+        />
+      </div>
+      <button
+        (click)="cerrarSesion()"
+        class="bg-white p-[1%] h-[20%] flex flex-row gap-1 items-center justify-center"
+      >
+        <p class="text-slate-800 text-xl font-bold font-google-suse">
+          Cerrar Sesion
+        </p>
+      </button>
+    </section>
+  </div>
+  <!-- <section class="h-[100%] w-[38%] flex flex-row gap-[1%] items-center">
+
+  </section> -->
+</div>

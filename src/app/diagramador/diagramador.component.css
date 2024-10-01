@@ -153,8 +153,8 @@ body {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 240px;
-  height: 120px;
+  width: 0px;
+  height: 0px;
 }
 
 /*  Stencil  */
@@ -534,7 +534,7 @@ file, You can obtain one at https://www.jointjs.com/license
 }
 
 .joint-app.joint-theme-modern .app-title {
-  background: #30d0c6;
+  background: #990dce;
 }
 
 .joint-app.joint-theme-modern .inspector-container {

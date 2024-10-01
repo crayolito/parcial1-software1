@@ -4,7 +4,7 @@ export interface ElementoClase {
   posicion: number[];
   size: number[];
   atributos: AtributoClase[];
-  // LOGIC : #feb663 = Clase Intermedia , #31d0c6 = Clase Normal
+  // LOGIC : #c1ff00 = Clase Intermedia , #990DCE = Clase Normal
   color: string;
 }
 
