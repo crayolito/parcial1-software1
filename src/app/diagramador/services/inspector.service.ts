@@ -153,10 +153,22 @@ export class InspectorService {
       ],
 
       arrowheadSize: [
+        // { value: 'M 0 0 0 0', content: 'Asociacion' },
+        // { value: 'M -10 0 0 10 10 0 0 -10 z', content: 'Composicion' },
+        // { value: 'M 0 -10 15 0 0 10 z', content: 'Agregacion' },
+        // { value: 'M 0 -10 -15 0 0 10 z', content: 'Generalizacion' },
         { value: 'M 0 0 0 0', content: 'Asociacion' },
         { value: 'M -10 0 0 10 10 0 0 -10 z', content: 'Composicion' },
         { value: 'M 0 -10 15 0 0 10 z', content: 'Agregacion' },
-        { value: 'M 0 -10 -15 0 0 10 z', content: 'Generalizacion' },
+        {
+          value: 'M 0 -10 -15 0 0 10 z',
+          content: 'Herencia',
+        },
+        {
+          value:
+            'M 0 -10 L 2.94 -3.09 L 9.51 -3.09 L 4.29 1.18 L 6.18 8.09 L 0 5 L -6.18 8.09 L -4.29 1.18 L -9.51 -3.09 L -2.94 -3.09 Z',
+          content: 'Dependencia',
+        },
       ],
       strokeWidth: [
         {

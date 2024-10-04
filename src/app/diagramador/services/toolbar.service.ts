@@ -55,11 +55,25 @@ export class ToolbarService {
           type: 'button',
           name: 'xmlImportar',
           group: 'xmlImportar',
-          text: 'Convertir a UML',
+          text: 'Convertir a Architect',
           attrs: {
             button: {
               id: 'btn-importar-xml',
               'data-tooltip': '',
+              'data-tooltip-position': 'top',
+              'data-tooltip-position-selector': '.toolbar-container',
+            },
+          },
+        },
+        {
+          type: 'button',
+          name: 'xmlExportar',
+          group: 'xmlExportar',
+          text: 'Traer de Architect',
+          attrs: {
+            button: {
+              id: 'btn-export-xml',
+              'data-tooltip': '.xml',
               'data-tooltip-position': 'top',
               'data-tooltip-position-selector': '.toolbar-container',
             },
