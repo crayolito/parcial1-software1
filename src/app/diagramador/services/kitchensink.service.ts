@@ -1682,10 +1682,9 @@ ${
       for (let line of lines) {
         line = line.trim();
 
-        // Detectar atributos simples
         if (
           line.startsWith('private') &&
-          !line.includes('id') && // Excluir el atributo id
+          !line.includes('id') &&
           (line.includes('String') ||
             line.includes('Long') ||
             line.includes('int') ||
@@ -1712,7 +1711,6 @@ ${
     const { simples } = parsearAtributos(jpaClass.contenido);
 
     return `package com.example.parcial1sw1.servicios;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
