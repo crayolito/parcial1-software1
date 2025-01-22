@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://examen-parcial1-909d2c6f6a8d.herokuapp.com',
-  wsUrl: 'https://examen-parcial1-909d2c6f6a8d.herokuapp.com',
+  apiUrl: 'https://backend-sw1-p1-b301811a4eff.herokuapp.com',
+  wsUrl: 'https://backend-sw1-p1-b301811a4eff.herokuapp.com/',
 };
