@@ -1338,7 +1338,7 @@ private List<${claseF.titulo}> ${pluralize(claseF.titulo.toLowerCase())};
                       }
                     }
                   }
-                  return [];
+                  return ['0', '0'];
                 }
 
                 // LOGIC : ACCEDER <connector>
